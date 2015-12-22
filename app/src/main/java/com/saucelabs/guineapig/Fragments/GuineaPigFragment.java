@@ -75,8 +75,8 @@ public class GuineaPigFragment extends Fragment {
     public void onSubmitClick(View view) {
         this.yourComments.setText(this.comments.getText());
         this.comments.setText("");
-        this.checkedCheckBox.setSelected(true);
-        this.UnCheckedCheckBox.setSelected(false);
+        this.checkedCheckBox.setChecked(true);
+        this.UnCheckedCheckBox.setChecked(false);
         Snackbar.make(view, "Thank you for your feedback!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
 
