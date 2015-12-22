@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">GuineaPig</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="section_label">SECTION_LABEL</string>
+    <string name="plain_text">i has no focus</string>
+    <string name="email_hint">We would really like to follow up!</string>
+    <string name="comment_hint">Thanks in advance, this really helpful.</string>
+    <string name="three_times">i appear 3 times</string>
+    <string name="page_content"> I am some page content </string>
+    <string name="i_am_a_div">i am a div</string>
+    <string name="your_comments">Your comments:</string>
+    <string name="none">None</string>
+    <string name="comments">Comments</string>
+    <string name="client_time">Client time:</string>
+    <string name="email">Email:</string>
+    <string name="send">send</string>
+    <string name="sandbox">This page is a Selenium sandbox</string>
+    <string name="i_am_a_link"><a href="https://saucelabs.com/test-guinea-pig2.html">i am a link</a></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
