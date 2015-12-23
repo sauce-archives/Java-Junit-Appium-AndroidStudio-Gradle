@@ -18,15 +18,19 @@ android {
             buildConfigField "String", "APP_PATH", "\"${getApkPath('release')}\""
             afterEvaluate {
                 testReleaseUnitTest.dependsOn assembleRelease
+                testReleaseUnitTest.testLogging.showStandardStreams true
             }
         }
         debug {
             buildConfigField "String", "APP_PATH", "\"${getApkPath('debug')}\""
             afterEvaluate {
                 testDebugUnitTest.dependsOn assembleDebug
+                testDebugUnitTest.testLogging.showStandardStreams true
             }
         }
     }
+
+
 
     lintOptions {
         disable 'InvalidPackage'
