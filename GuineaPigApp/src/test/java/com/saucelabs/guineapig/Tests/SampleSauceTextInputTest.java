@@ -32,9 +32,6 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
     public void verifyEmailInputTest() throws InvalidElementStateException {
         String emailInputText = "abc@gmail.com";
 
-        // Navigate to the page
-        driver.get("https://saucelabs.com/test/guinea-pig");
-
         // get page object
         GuineaPigPage page = GuineaPigPage.getPage(driver);
 
@@ -42,8 +39,10 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
          enterEmailText page is an exposed "service",
              which interacts with the email input field element by sending text to it.
         */
+        page.clickEmailText();
+        page.clearEmailText();
         page.enterEmailText(emailInputText);
-
+        this.driver.hideKeyboard();
         /*
          Assertions should be part of test and not part of Page object.
          Each test should be verifying one piece of functionality (atomic testing)
@@ -62,8 +61,6 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
     public void verifyCommentInputTest() throws InvalidElementStateException {
         String commentInputText = UUID.randomUUID().toString();
 
-        driver.get("https://saucelabs.com/test/guinea-pig");
-
         // Navigate to the page
         GuineaPigPage page = GuineaPigPage.getPage(driver);
 
@@ -71,8 +68,10 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
          enterCommentText page is an exposed "service",
              which interacts with the email input field element by sending text to it.
         */
+        page.clickCommentText();
+        page.clearCommentText();
         page.enterCommentText(commentInputText);
-
+        driver.hideKeyboard();
         /*
          Assertions should be part of test and not part of Page object.
          Each test should be verifying one piece of functionality (atomic testing)

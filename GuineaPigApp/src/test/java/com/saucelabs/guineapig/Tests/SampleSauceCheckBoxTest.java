@@ -25,9 +25,6 @@ public class SampleSauceCheckBoxTest extends SampleSauceTestBase {
     @Test
     public void verifyUncheckedCheckBoxInputTest() throws InvalidElementStateException {
 
-        //Navigate to the page
-        driver.get("https://saucelabs.com/test/guinea-pig");
-
         // get page object
         GuineaPigPage page = GuineaPigPage.getPage(driver);
 
@@ -53,9 +50,7 @@ public class SampleSauceCheckBoxTest extends SampleSauceTestBase {
     @Test
     public void verifyCheckedCheckBoxInputTest() throws InvalidElementStateException {
 
-        driver.get("https://saucelabs.com/test/guinea-pig");
-
-        //Navigate to the page
+        //get the page object
         GuineaPigPage page = GuineaPigPage.getPage(driver);
 
         /*

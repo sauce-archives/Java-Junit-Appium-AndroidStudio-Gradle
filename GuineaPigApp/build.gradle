@@ -15,6 +15,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "APP_PATH", "\"${getApkPath('release')}\""
+            afterEvaluate {
+                testReleaseUnitTest.dependsOn assembleRelease
+            }
+        }
+        debug {
+            buildConfigField "String", "APP_PATH", "\"${getApkPath('debug')}\""
+            afterEvaluate {
+                testDebugUnitTest.dependsOn assembleDebug
+            }
         }
     }
 
@@ -27,6 +37,21 @@ android {
     }
 
 }
+
+
+def getApkPath(String type) {
+    if (type.toLowerCase().contentEquals("debug")) {
+
+        return getBuildDir().getAbsolutePath() +
+                '/outputs/apk/GuineaPigApp-debug.apk'
+    } else if (type.toLowerCase().contentEquals("release")){
+        return getBuildDir().getAbsolutePath() +
+                '/outputs/apk/GuineaPigApp-release.apk'
+    }
+}
+
+
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -41,7 +66,9 @@ dependencies {
     testCompile 'org.hamcrest:hamcrest-library:1.1'
     testCompile 'org.seleniumhq.selenium:selenium-java:2.48.2'
     testCompile 'com.saucelabs:sauce_junit:2.1.20'
-
+    testCompile 'com.saucelabs:saucerest:1.0.28'
+    testCompile 'io.appium:java-client:3.2.0'
+    testCompile 'commons-lang:commons-lang:2.6'
 }
 
 

@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import io.appium.java_client.MobileElement;
+
 /**
  * Created by mehmetgerceker on 12/21/15.
  */
@@ -30,7 +32,7 @@ public class GuineaPigPage extends PageBase {
     private WebElement emailTextInput;
 
     @FindBy(id = "comments")
-    private WebElement commentsTextAreaInput;
+    private WebElement commentsTextInput;
 
     @FindBy(id = "submit")
     private WebElement submitButton;
@@ -44,7 +46,8 @@ public class GuineaPigPage extends PageBase {
     }
 
     public boolean getUncheckedCheckBoxState() {
-        return this.uncheckedCheckbox.isSelected();
+        String attr = this.uncheckedCheckbox.getAttribute("checked");
+        return attr.toLowerCase().contentEquals("true");
     }
 
     public void uncheckCheckedCheckBox() {
@@ -52,22 +55,26 @@ public class GuineaPigPage extends PageBase {
     }
 
     public boolean getCheckedCheckBoxState() {
-        return this.checkedCheckbox.isSelected();
+        String attr = this.checkedCheckbox.getAttribute("checked");
+        return attr.toLowerCase().contentEquals("true");
     }
 
     public void enterCommentText(String text) {
-        this.commentsTextAreaInput.click();
-        setTextAreaInputValue(this.commentsTextAreaInput, text);
+        this.commentsTextInput.click();
+        setTextInputValue(this.commentsTextInput, text);
     }
-
+    public void clickCommentText() {
+        this.commentsTextInput.click();
+    }
+    public void clearCommentText() {
+        this.commentsTextInput.clear();
+    }
     public String getCommentText() {
-        return this.commentsTextAreaInput.getAttribute("value");
+        return this.commentsTextInput.getText();
     }
-
     public void submitForm() {
         clickButton(this.submitButton);
     }
-
     public String getSubmittedCommentText() {
         return this.yourCommentsSpan.getText();
     }
@@ -75,9 +82,14 @@ public class GuineaPigPage extends PageBase {
     public void enterEmailText(String email) {
         setTextInputValue(this.emailTextInput, email);
     }
-
+    public void clickEmailText() {
+        this.emailTextInput.click();
+    }
+    public void clearEmailText() {
+        this.emailTextInput.clear();
+    }
     public String getEmailText() {
-        return this.emailTextInput.getAttribute("value");
+        return this.emailTextInput.getText();
     }
 
 }

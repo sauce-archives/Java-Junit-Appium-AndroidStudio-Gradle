@@ -13,9 +13,11 @@ import org.junit.*;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import com.saucelabs.guineapig.BuildConfig;
 import com.saucelabs.junit.ConcurrentParameterized;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
@@ -25,12 +27,15 @@ import java.util.LinkedList;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.Utils.*;
 
+import io.appium.java_client.AppiumDriver;
+
 
 /**
- * Demonstrates how to write a JUnit test that runs tests against Sauce Labs using multiple browsers in parallel.
+ * Demonstrates how to write a JUnit test that runs tests against Sauce Labs using multiple browsers
+ * in parallel.
  * <p>
- * The test also includes the {@link SauceOnDemandTestWatcher} which will invoke the Sauce REST API to mark
- * the test as passed or failed.
+ * The test also includes the {@link SauceOnDemandTestWatcher} which will invoke the Sauce REST API
+ * to mark the test as passed or failed.
  *
  * @author Mehmet Gerceker
  */
@@ -39,13 +44,14 @@ import com.saucelabs.Utils.*;
 public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider {
 
     public static String seleniumURI;
-    public static String buildTag;
-    public static String app;
-    public String username = System.getenv("SAUCE_USERNAME");
-    public String accessKey = System.getenv("SAUCE_ACCESS_KEY");
+    public static String buildTag = System.getenv("BUILD_TAG");
+    public static String app = null;
+    public static String username = System.getenv("SAUCE_USERNAME");
+    public static String accessKey = System.getenv("SAUCE_ACCESS_KEY");
     /**
-     * Constructs a {@link SauceOnDemandAuthentication} instance using the supplied user name/access key.  To use the authentication
-     * supplied by environment variables or from an external file, use the no-arg {@link SauceOnDemandAuthentication} constructor.
+     * Constructs a {@link SauceOnDemandAuthentication} instance using the supplied user name/access
+     * key.  To use the authentication supplied by environment variables or from an external file,
+     * use the no-arg {@link SauceOnDemandAuthentication} constructor.
      */
     public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(username, accessKey);
 
@@ -96,11 +102,12 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider {
     /**
      * The {@link WebDriver} instance which is used to perform browser interactions with.
      */
-    protected WebDriver driver;
+    protected AppiumDriver driver;
 
     /**
-     * Constructs a new instance of the test.  The constructor requires three string parameters, which represent the operating
-     * system, version and browser to be used when launching a Sauce VM.  The order of the parameters should be the same
+     * Constructs a new instance of the test.  The constructor requires three string parameters,
+     * which represent the operating system, version and browser to be used when launching a Sauce
+     * VM.  The order of the parameters should be the same
      * as that of the elements within the {@link #browsersStrings()} method.
      *
      * @param platformName      name of the platformName. (Android, iOS, etc.)
@@ -133,29 +140,35 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider {
         LinkedList<String[]> browsers = new LinkedList<>();
 
         browsers.add(new String[]
-                {"Android", "Android Emulator", "4.3", "1.416", "portrait"});
+                {"Android", "Android Emulator", "4.3", "1.4.16", "portrait"});
         browsers.add(new String[]
-                {"Android", "Google Nexus 7 HD Emulator", "4.4", "1.416", "portrait"});
+                {"Android", "Google Nexus 7 HD Emulator", "4.4", "1.4.16", "portrait"});
 
         return browsers;
     }
 
     @BeforeClass
-    public static void setupClass() {
+    public static void setupClass() throws Exception{
         //get the uri to send the commands to.
         seleniumURI = SauceHelpers.buildSauceUri();
         //If available add build tag. When running under Jenkins BUILD_TAG is automatically set.
         //You can set this manually on manual runs.
-        buildTag = System.getenv("BUILD_TAG");
-        app = System.getenv("APP");
+        app = BuildConfig.APP_PATH;
+        if (app != null){
+            app = SauceHelpers.uploadAppToSauceStorage(app, username, accessKey);
+        } else {
+            System.err.println("No app no test! " + BuildConfig.APP_PATH);
+        }
     }
 
     /**
-     * Constructs a new {@link RemoteWebDriver} instance which is configured to use the capabilities defined by the {@link #platformName},
-     * {@link #platformVersion} and {@link #deviceName} instance variables, and which is configured to run against ondemand.saucelabs.com, using
+     * Constructs a new {@link RemoteWebDriver} instance which is configured to use the capabilities
+     * defined by the {@link #platformName}, {@link #platformVersion} and {@link #deviceName}
+     * instance variables, and which is configured to run against ondemand.saucelabs.com, using
      * the username and access key populated by the {@link #authentication} instance.
      *
-     * @throws Exception if an error occurs during the creation of the {@link RemoteWebDriver} instance.
+     * @throws Exception if an error occurs during the creation of the {@link RemoteWebDriver}
+     * instance.
      */
     @Before
     public void setUp() throws Exception {
@@ -171,26 +184,36 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider {
             capabilities.setCapability("deviceOrientation", this.deviceOrientation);
         if (this.appiumVersion != null)
             capabilities.setCapability("appiumVersion", this.appiumVersion);
-
-        capabilities.setCapability("broserName", "");
+        if (app != null)
+            capabilities.setCapability("app", app);
+        else
+            throw new Exception("App path needs to be specified for this test to run!");
 
         String methodName = name.getMethodName();
         capabilities.setCapability("name", methodName);
 
         //Getting the build name.
-        //Using the Jenkins ENV var. You can use your own. If it is not set test will run without a build id.
+        //Using the Jenkins ENV var. You can use your own. If it is not set test will run without
+        // a build id.
         if (buildTag != null) {
             capabilities.setCapability("build", buildTag);
         }
 
-        this.driver = new RemoteWebDriver(
+        this.driver = new AppiumDriver(
                 new URL("http://" + username + ":" + accessKey + seleniumURI + "/wd/hub"),
-                capabilities);
+                capabilities) {
+            @Override
+            public WebElement scrollTo(String text) {
+                return null;
+            }
 
-        this.sessionId = (((RemoteWebDriver) driver).getSessionId()).toString();
+            @Override
+            public WebElement scrollToExact(String text) {
+                return null;
+            }
+        };
 
-        String message = String.format("SauceOnDemandSessionID=%1$s job-name=%2$s", this.sessionId, methodName);
-        System.out.println(message);
+        this.sessionId = driver.getSessionId().toString();
     }
 
     @After

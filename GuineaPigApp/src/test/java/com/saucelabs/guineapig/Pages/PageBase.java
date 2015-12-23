@@ -3,6 +3,8 @@ package com.saucelabs.guineapig.Pages;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebElement;
 
+import io.appium.java_client.MobileElement;
+
 /**
  * Created by mehmetgerceker on 12/22/15.
  */
@@ -10,12 +12,9 @@ public class PageBase {
 
     protected static void setCheckCheckBoxState(WebElement checkBox, boolean checked)
             throws InvalidElementStateException {
-        if (!checkBox.getAttribute("type").contentEquals("checkbox") || !checkBox.getTagName().contentEquals("input")) {
-            throw new InvalidElementStateException("This web element is not a checkbox!");
-        }
         //we may wanna check if it is displayed and enabled, when performing actions.
         if (checkBox.isDisplayed() && checkBox.isEnabled()) {
-            if (checkBox.isSelected() != checked) {
+            if (!checkBox.getAttribute("checked").toLowerCase().equals(String.valueOf(checked))) {
                 checkBox.click();
             }
         } else {
@@ -26,21 +25,7 @@ public class PageBase {
 
     }
 
-    protected static void setTextInputValue(WebElement textInput, String value)
-            throws InvalidElementStateException {
-        setTextElementText(textInput, "text", "input", value);
-
-    }
-
-    protected static void setTextAreaInputValue(WebElement textArea, String value)
-            throws InvalidElementStateException {
-        setTextElementText(textArea, "textarea", "textarea", value);
-    }
-
     protected static void clickButton(WebElement button) throws InvalidElementStateException {
-        if (!button.getAttribute("type").contentEquals("submit") || !button.getTagName().contentEquals("input")) {
-            throw new InvalidElementStateException("This web element is not a button input!");
-        }
         //we may wanna check if it is displayed and enabled, when performing actions.
         if (button.isDisplayed() && button.isEnabled()) {
             button.click();
@@ -51,16 +36,10 @@ public class PageBase {
         }
     }
 
-    private static void setTextElementText(WebElement textElement, String textInputType, String tag, String value)
+    protected static void setTextInputValue(WebElement textElement, String value)
             throws InvalidElementStateException {
-        if (!textElement.getAttribute("type").contentEquals(textInputType) ||
-                !textElement.getTagName().contentEquals(tag)) {
-            throw new InvalidElementStateException("This web element is not a text input!");
-        }
         //we may wanna check if it is displayed and enabled, when performing actions.
         if (textElement.isDisplayed() && textElement.isEnabled()) {
-            textElement.click();
-            textElement.clear();
             textElement.sendKeys(value);
         } else {
             throw new InvalidElementStateException("Text input by "
