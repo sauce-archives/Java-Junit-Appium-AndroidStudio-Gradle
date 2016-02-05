@@ -143,6 +143,8 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider {
                 {"Android", "Android Emulator", "4.3", "1.4.16", "portrait"});
         browsers.add(new String[]
                 {"Android", "Google Nexus 7 HD Emulator", "4.4", "1.4.16", "portrait"});
+        browsers.add(new String[]
+                {"Android", "Samsung Galaxy S4 device", "4.4", "1.4.16", "portrait"});
 
         return browsers;
     }
@@ -151,7 +153,6 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider {
     public static void setupClass() throws Exception{
         //get the uri to send the commands to.
         seleniumURI = SauceHelpers.buildSauceUri();
-        //If available add build tag. When running under Jenkins BUILD_TAG is automatically set.
         //You can set this manually on manual runs.
         app = BuildConfig.APP_PATH;
         if (app != null){
