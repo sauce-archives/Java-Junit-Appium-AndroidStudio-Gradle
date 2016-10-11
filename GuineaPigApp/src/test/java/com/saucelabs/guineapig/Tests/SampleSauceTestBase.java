@@ -200,7 +200,7 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider {
         }
 
         this.driver = new AppiumDriver(
-                new URL("http://" + username + ":" + accessKey + seleniumURI + "/wd/hub"),
+                new URL("https://" + username + ":" + accessKey + seleniumURI + "/wd/hub"),
                 capabilities) {
             @Override
             public WebElement scrollTo(String text) {
