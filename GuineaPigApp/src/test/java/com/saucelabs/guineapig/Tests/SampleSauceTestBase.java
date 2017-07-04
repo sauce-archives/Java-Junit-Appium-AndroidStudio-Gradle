@@ -46,8 +46,8 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider {
     public static String seleniumURI;
     public static String buildTag = System.getenv("BUILD_TAG");
     public static String app = null;
-    public static String username = System.getenv("SAUCE_USERNAME");
-    public static String accessKey = System.getenv("SAUCE_ACCESS_KEY");
+    public static String username = "estefania_sdos";
+    public static String accessKey = "fbb8e1c8-1a67-4664-9456-5399c8566e06";
     /**
      * Constructs a {@link SauceOnDemandAuthentication} instance using the supplied user name/access
      * key.  To use the authentication supplied by environment variables or from an external file,
@@ -140,10 +140,17 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider {
         LinkedList<String[]> browsers = new LinkedList<>();
 
         browsers.add(new String[]
-                {"Android", "Android Emulator", "4.3", "1.4.16", "portrait"});
+                {"Android", "Android Emulator", "4.3", "1.6.4", "portrait"});
         browsers.add(new String[]
-                {"Android", "Google Nexus 7 HD Emulator", "4.4", "1.4.16", "portrait"});
-
+                {"Android", "Google Nexus 7 HD Emulator", "4.4", "1.6.4", "landscape"});
+        browsers.add(new String[]
+                {"Android", "Android Emulator", "6.0", "1.6.4", "portrait"});
+        browsers.add(new String[]
+                {"Android", "Android Emulator", "5.1", "1.6.4", "landscape"});
+        browsers.add(new String[]
+                {"Android", "Samsung Galaxy Nexus Emulator", "4.4", "1.6.4", "portrait"});
+        browsers.add(new String[]
+                {"Android", "Android Emulator", "5.0", "1.6.4", "landscape"});
         return browsers;
     }
 
